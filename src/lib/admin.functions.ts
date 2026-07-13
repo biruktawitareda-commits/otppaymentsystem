@@ -64,11 +64,13 @@ export const createCashier = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => credsSchema.parse(data))
   .handler(async ({ data, context }) => {
-    const { data: isAdmin } = await context.supabase.rpc("has_role", {
-      _user_id: context.userId,
-      _role: "admin",
-    });
-    if (!isAdmin) throw new Error("Forbidden: owner access required");
+    const { data: adminRole } = await context.supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", context.userId)
+      .eq("role", "admin")
+      .maybeSingle();
+    if (!adminRole) throw new Error("Forbidden: owner access required");
     const { supabaseAdmin } = await import(
       "@/integrations/supabase/client.server"
     );
@@ -97,11 +99,13 @@ export const createCashier = createServerFn({ method: "POST" })
 export const listCashiers = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    const { data: isAdmin } = await context.supabase.rpc("has_role", {
-      _user_id: context.userId,
-      _role: "admin",
-    });
-    if (!isAdmin) throw new Error("Forbidden: owner access required");
+    const { data: adminRole } = await context.supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", context.userId)
+      .eq("role", "admin")
+      .maybeSingle();
+    if (!adminRole) throw new Error("Forbidden: owner access required");
     const { supabaseAdmin } = await import(
       "@/integrations/supabase/client.server"
     );
@@ -182,11 +186,13 @@ export const setCashierActive = createServerFn({ method: "POST" })
     z.object({ cashierId: z.string().uuid(), active: z.boolean() }).parse(data),
   )
   .handler(async ({ data, context }) => {
-    const { data: isAdmin } = await context.supabase.rpc("has_role", {
-      _user_id: context.userId,
-      _role: "admin",
-    });
-    if (!isAdmin) throw new Error("Forbidden: owner access required");
+    const { data: adminRole } = await context.supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", context.userId)
+      .eq("role", "admin")
+      .maybeSingle();
+    if (!adminRole) throw new Error("Forbidden: owner access required");
     const { supabaseAdmin } = await import(
       "@/integrations/supabase/client.server"
     );
