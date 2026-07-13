@@ -20,7 +20,7 @@ export const Route = createFileRoute("/")({
       {
         property: "og:description",
         content:
-          "OTP-confirmed payments, SMS receipts, sales tracking, and cashier accounts for your supermarket.",
+          "Take supermarket payments with SMS one-time codes. Instant receipts, sales dashboard, and cashier logins — all in one register.",
       },
     ],
   }),

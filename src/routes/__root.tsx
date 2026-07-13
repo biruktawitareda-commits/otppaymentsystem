@@ -83,18 +83,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Take supermarket payments with SMS one-time codes. Instant receipts, sales dashboard, and cashier logins.",
+          "Take supermarket payments with SMS one-time codes. Instant receipts, sales dashboard, and cashier logins — all in one register.",
       },
       { name: "author", content: "MartPay" },
       { property: "og:title", content: "MartPay — Supermarket OTP Payments" },
       {
         property: "og:description",
         content:
-          "OTP-confirmed payments, SMS receipts, sales tracking, and cashier accounts for your supermarket.",
+          "Take supermarket payments with SMS one-time codes. Instant receipts, sales dashboard, and cashier logins — all in one register.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "MartPay — Supermarket OTP Payments" },
+      { name: "twitter:description", content: "Take supermarket payments with SMS one-time codes. Instant receipts, sales dashboard, and cashier logins — all in one register." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/cd81ee16-3912-44c1-9305-105b217f117c" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/cd81ee16-3912-44c1-9305-105b217f117c" },
     ],
     links: [
       {
