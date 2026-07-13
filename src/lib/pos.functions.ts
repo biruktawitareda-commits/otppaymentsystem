@@ -7,6 +7,7 @@ import {
   MAX_OTP_ATTEMPTS,
   generateOtp,
   makeReceiptNo,
+  assertActiveCashier,
 } from "./pos.server";
 
 const itemSchema = z.object({
@@ -43,6 +44,8 @@ export const startPayment = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => startSchema.parse(data))
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
+
+    await assertActiveCashier(supabase, userId);
 
     const amount = Math.round(
       data.items.reduce((sum, i) => sum + i.qty * i.price, 0) * 100,
@@ -105,7 +108,9 @@ export const verifyOtp = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => verifySchema.parse(data))
   .handler(async ({ data, context }) => {
-    const { supabase } = context;
+    const { supabase, userId } = context;
+
+    await assertActiveCashier(supabase, userId);
 
     const { data: tx, error } = await supabase
       .from("transactions")
@@ -202,6 +207,7 @@ export const cancelPayment = createServerFn({ method: "POST" })
     z.object({ transactionId: z.string().uuid() }).parse(data),
   )
   .handler(async ({ data, context }) => {
+    await assertActiveCashier(context.supabase, context.userId);
     const { error } = await context.supabase
       .from("transactions")
       .update({ status: "cancelled", otp_code: null })
